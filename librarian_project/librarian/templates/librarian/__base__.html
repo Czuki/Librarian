@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-static-top" style="margin-left: 12%">
+
+            <div class="dropdown ">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Menu
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="/">Home</a>
+                    <a class="dropdown-item" href="/add-author/">Add new author</a>
+                    <a class="dropdown-item" href="/add-book/">Add new book</a>
+
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+          <main>
+            <div class="py-5 text-center">
+              <img class="d-block mx-auto mb-4" src="" alt="" width="" height="">
+
+              <h2>Library Manager</h2>
+
+              <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. </p>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-muted">Recently added books</span>
+                </h4>
+                <ul class="list-group mb-3">
+
+                    {% for book in recent_books %}
+                      <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                          <h6 class="my-0">{{ book.name }}</h6>
+                          <small class="text-muted">{{ book.author }}</small>
+                        </div>
+                        <span class="text-muted">{{ book.isbn }}</span>
+                      </li>
+                    {% endfor %}
+
+                </ul>
+              </div>
+
+            {% block content %}
+
+              <div class="col-md-7 col-lg-8">
+
+                <h4 class="mb-3">Add new book</h4>
+
+                <form target="" method="post"> {% csrf_token %}
+                  <div class="row g-3">
+                    <div class="col-sm-6">
+                      <label for="title" class="form-label">Title</label>
+                      <input type="text" name="title" class="form-control" id="title" placeholder="" value="" required>
+                    </div>
+
+                    <div class="col-sm-6">
+                      <label for="author" class="form-label">Author</label>
+                        <select name="author" id="author" class="form-control">
+                            {% for author in authors %}
+
+                                <option value={{ author.pk }}>{{ author }}</option>
+
+                            {% endfor %}
+
+                        </select>
+{#                      <input type="text" name="author" class="form-control" id="author" placeholder="" value="" required>#}
+                    </div>
+
+                    <div class="col-sm-6">
+                      <label for="ISBN" class="form-label">ISBN</label>
+                      <input type="number" name="isbn" class="form-control" id="ISBN" placeholder="" value="" required>
+                    </div>
+                  </div>
+
+                  <hr class="my-4">
+
+                  <button class="w-100 btn btn-primary btn-lg" type="submit">Confirm</button>
+                </form>
+              </div>
+            {% endblock content %}
+            </div>
+          </main>
+
+          <footer class="my-5 pt-5 text-muted text-center text-small">
+            <p class="mb-1">Made by Czuki</p>
+            <ul class="list-inline">
+              <li class="list-inline-item"><a href="#">FACEBOOK</a></li>
+              <li class="list-inline-item"><a href="#">GITHUB</a></li>
+              <li class="list-inline-item"><a href="#">LINKEDIN</a></li>
+            </ul>
+          </footer>
+        </div>
+
+    </body>
+</html>

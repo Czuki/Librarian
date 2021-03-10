@@ -16,6 +16,7 @@ class HomeView(View):
         return render(request, 'librarian/__base__.html', context)
 
     def post(self, request):
+        #comment
         new_book_title = request.POST.get('title')
         new_book_author_pk = request.POST.get('author')
         new_book_isbn = request.POST.get('isbn')

@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from librarian.views import HomeView, AuthorAdd
+from librarian.views import HomeView, AuthorAdd, AuthorAutocomplete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view()),
     path('add-book/', HomeView.as_view()),
     path('add-author/', AuthorAdd.as_view()),
+    path('author-autocomplete/', AuthorAutocomplete.as_view(), name='author-autocomplete')
 ]

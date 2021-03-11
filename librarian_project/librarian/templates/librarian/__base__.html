@@ -9,6 +9,10 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        {# SELECT2 #}
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     </head>
     <body>
         <nav class="navbar navbar-default navbar-static-top" style="margin-left: 12%">
@@ -56,44 +60,53 @@
                 </ul>
               </div>
 
-            {% block content %}
+{% block content %}
+<div>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-              <div class="col-md-7 col-lg-8">
+        <table style="display: none">
+            {{ view.formset.empty_form }}
+        </table>
 
-                <h4 class="mb-3">Add new book</h4>
+        <table>
+            {{ view.formset }}
+        </table>
 
-                <form target="" method="post"> {% csrf_token %}
-                  <div class="row g-3">
-                    <div class="col-sm-6">
-                      <label for="title" class="form-label">Title</label>
-                      <input type="text" name="title" class="form-control" id="title" placeholder="" value="" required>
-                    </div>
+        <span id="add-form" class="button">Add form</span>
 
-                    <div class="col-sm-6">
-                      <label for="author" class="form-label">Author</label>
-                        <select name="author" id="author" class="form-control">
-                            {% for author in authors %}
+        <input type="submit" />
+    </form>
+</div>
+{% endblock %}
 
-                                <option value={{ author.pk }}>{{ author }}</option>
+{% block footer %}
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 
-                            {% endfor %}
+{{ form.media }}
 
-                        </select>
-{#                      <input type="text" name="author" class="form-control" id="author" placeholder="" value="" required>#}
-                    </div>
-
-                    <div class="col-sm-6">
-                      <label for="ISBN" class="form-label">ISBN</label>
-                      <input type="number" name="isbn" class="form-control" id="ISBN" placeholder="" value="" required>
-                    </div>
-                  </div>
-
-                  <hr class="my-4">
-
-                  <button class="w-100 btn btn-primary btn-lg" type="submit">Confirm</button>
-                </form>
-              </div>
-            {% endblock content %}
+<script>
+(function($) {
+    $('#add-form').click(function() {
+        var index = $('#id_inline_test_models-TOTAL_FORMS').val()
+        var newTable = $('#id_inline_test_models-__prefix__-DELETE').parents('table').clone()
+        newTable.find(':input').each(function() {
+            for (attr of ['name', 'id'])
+                $(this).attr(
+                    attr,
+                    $(this).attr(attr).replace('__prefix__', index)
+                )
+        })
+        newTable.insertBefore($(this))
+        $('#id_inline_test_models-TOTAL_FORMS').val(
+            parseInt($('#id_inline_test_models-TOTAL_FORMS').val()) + 1
+        )
+        newTable.slideDown()
+    })
+})($)
+</script>
+{% endblock %}
             </div>
           </main>
 

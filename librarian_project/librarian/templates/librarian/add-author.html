@@ -2,29 +2,24 @@
 
 {% block content %}
 
-              <div class="col-md-7 col-lg-8">
+<div class="col-md-7 col-lg-8">
 
-                <h4 class="mb-3">Add new author</h4>
+    <h4 class="mb-3">Add new author</h4>
 
-                <form target="" method="post"> {% csrf_token %}
-                  <div class="row g-3">
-                    <div class="col-sm-6">
-                      <label for="first_name" class="form-label">First Name</label>
-                      <input type="text" name="first_name" class="form-control" id="first_name" placeholder="" value="" required>
-                    </div>
+    <form target="" method="post"> {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-sm-6">
+              <label for="first_name" class="form-label">First Name</label>
+              <input type="text" name="first_name" class="form-control" id="first_name" placeholder="" value="" required>
+            </div>
 
-                    <div class="col-sm-6">
-                      <label for="last_name" class="form-label">Last Name</label>
-                      <input type="text" name="last_name" class="form-control" id="last_name" placeholder="" value="" required>
-
-{#                      <input type="text" name="author" class="form-control" id="author" placeholder="" value="" required>#}
-                    </div>
-
-                  </div>
-
-                  <hr class="my-4">
-
-                  <button class="w-100 btn btn-primary btn-lg" type="submit">Confirm</button>
-                </form>
-              </div>
-            {% endblock content %}
+            <div class="col-sm-6">
+              <label for="last_name" class="form-label">Last Name</label>
+              <input type="text" name="last_name" class="form-control" id="last_name" placeholder="" value="" required>
+            </div>
+        </div>
+        <hr class="my-4">
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Confirm</button>
+    </form>
+</div>
+{% endblock content %}

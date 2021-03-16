@@ -4,8 +4,6 @@ from librarian.models import Author, Book
 
 
 
-
-
 class HomeView(View):
     def get(self, request):
         context = {

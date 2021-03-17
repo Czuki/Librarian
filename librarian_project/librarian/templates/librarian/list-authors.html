@@ -1,8 +1,47 @@
 {% extends 'librarian/__base__.html' %}
 
 {% block content %}
-
-
-
-
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6">
+            <nav>
+                {% if authors.has_other_pages %}
+                    <div class="">
+                        <ul class="pagination justify-content-center">
+                            {% if authors.has_previous %}
+                                <li class="page-item"><a class="page-link" href="?page={{ authors.previous_page_number }}">&laquo;</a></li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                            {% endif %}
+                            {% for i in authors.paginator.page_range %}
+                                {% if authors.number == i %}
+                                    <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if authors.has_next %}
+                                <li class="page-item"><a class="page-link" href="?page={{ authors.next_page_number }}">&raquo;</a></li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+    {% for author in authors %}
+        <div class="row mb-3">
+            <div class="col-4 themed-grid-col"></div>
+            <div class="col-4 themed-grid-col border rounded border-primary">{{author.last_name}} {{author.first_name}} </div>
+            <div class="col-4 themed-grid-col">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <a href="/delete-author/{{ author.id }}/" type="button" class="btn btn-primary">Usuń</a>
+                  <a href="" type="button" class="btn btn-primary">Szczegóły</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 {% endblock content %}

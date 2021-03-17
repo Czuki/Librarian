@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from librarian.models import Author, Book
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class HomeView(View):
@@ -49,19 +50,32 @@ class AuthorAdd(View):
 
 class AuthorList(View):
     def get(self, request):
-        authors = Author.objects.all()
+        authors_list = Author.objects.all().order_by('last_name')
+
+        paginator = Paginator(authors_list, 6)
+        page = request.GET.get('page')
+
+        try:
+            authors = paginator.page(page)
+        except PageNotAnInteger:
+            authors = paginator.page(1)
+        except EmptyPage:
+            authors = paginator.page(paginator.num_pages)
 
         context = {
+            'page': page,
             'authors': authors
         }
-
         return render(request, 'librarian/list-authors.html', context)
 
 
 class AuthorDelete(View):
+    #TODO: only for admins
     def get(self, request, author_id):
         author_to_delete = get_object_or_404(Author, pk=author_id)
         author_to_delete.delete()
+
+
 
         return redirect('/list-authors/')
 

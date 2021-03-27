@@ -11,6 +11,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </head>
     <body>
+
         <nav class="navbar navbar-default navbar-static-top" style="margin-left: 12%">
             <div class="dropdown ">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</button>
@@ -20,10 +21,12 @@
                     <a class="dropdown-item" href="/add-book/">Add new book</a>
                     <a class="dropdown-item" href="/list-authors/">Authors</a>
                     <a class="dropdown-item" href="/list-books/">Books</a>
+
                 </div>
                 <a href="/signup" class="btn btn-secondary" type="button" id="signup">Rejestracja</a>
                 <a href="/accounts/login" class="btn btn-secondary" type="button" id="signin">Zaloguj</a>
                 <a href="/accounts/logout" class="btn btn-secondary" type="button" id="signout">Wyloguj</a>
+                {% if user.is_authenticated %}<button class="btn btn-secondary" disabled> Zalogowano jako: {{ user }} </button>{% endif %}
             </div>
         </nav>
         <div class="container">

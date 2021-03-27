@@ -101,19 +101,10 @@ class AuthorList(View):
 class AuthorDelete(View):
     #TODO: only for admins
     def get(self, request, author_id):
-        author_to_delete = get_object_or_404(Author, pk=author_id)
-        author_to_delete.delete()
-        return redirect('/list-authors/')
 
-
-
-
-
-
-
-
-
-
-
-
-
+        if self.request.user.has_perm('librarian.delete_author'):
+            author_to_delete = get_object_or_404(Author, pk=author_id)
+            author_to_delete.delete()
+            return redirect('/list-authors/')
+        else:
+            return render(request, 'librarian/list-authors.html', {'message': 'Nie masz dostępu do tej akcji'})

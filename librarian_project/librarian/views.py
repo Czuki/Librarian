@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from librarian.models import Author, Book
+from librarian.models import Author, Book, Profile, BookReview, AuthorReview
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 def signup(request):
@@ -14,6 +15,7 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
+            print(raw_password)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('home')
@@ -28,7 +30,7 @@ class HomeView(View):
             'authors': Author.objects.all(),
             'books': Book.objects.all(),
             'recent_books': Book.objects.order_by('-id')[:5],
-                   }
+        }
         return render(request, 'librarian/__base__.html', context)
 
     def post(self, request):
@@ -59,6 +61,17 @@ class BookList(View):
             'books': books,
         }
         return render(request, 'librarian/list-books.html', context)
+
+
+class BookDelete(View):
+    def get(self, request, book_id):
+
+        if self.request.user.has_perm('librarian.delete_book'):
+            book_to_delete = get_object_or_404(Book, pk=book_id)
+            book_to_delete.delete()
+            return redirect('/list-books/')
+        else:
+            return render(request, 'librarian/list-books.html', {'message': 'Nie masz dostępu do tej akcji'})
 
 
 class AuthorAdd(View):
@@ -99,12 +112,56 @@ class AuthorList(View):
 
 
 class AuthorDelete(View):
-    #TODO: only for admins
     def get(self, request, author_id):
-
         if self.request.user.has_perm('librarian.delete_author'):
             author_to_delete = get_object_or_404(Author, pk=author_id)
             author_to_delete.delete()
             return redirect('/list-authors/')
         else:
             return render(request, 'librarian/list-authors.html', {'message': 'Nie masz dostępu do tej akcji'})
+
+
+class ProfileView(View):
+    def get(self, request):
+        current_user = get_object_or_404(User, pk=request.user.id)
+        prof = Profile.objects.get(user=current_user)
+        context = {
+            'current_user': prof,
+            'fav_books': prof.fav_books.all(),
+            'fav_authors': prof.fav_authors.all(),
+        }
+        return render(request, 'librarian/profile.html', context)
+
+
+class FavBook(View):
+    def get(self, request, book_id):
+        current_user = get_object_or_404(User, pk=request.user.id)
+        profile = Profile.objects.get(user=current_user)
+        fav_books = profile.fav_books.all()
+        liked_book = get_object_or_404(Book, pk=book_id)
+        if liked_book not in fav_books:
+            profile.fav_books.add(liked_book)
+            return redirect('/profile/')
+        return redirect('/list-books/')
+
+
+class FavBookRemove(View):
+    def get(self, request, book_id):
+        current_user = get_object_or_404(User, pk=request.user.id)
+        profile = Profile.objects.get(user=current_user)
+        unliked_book = get_object_or_404(Book, pk=book_id)
+        profile.fav_books.remove(unliked_book)
+        return redirect('/profile/')
+
+
+class ReviewsView(View):
+    def get(self, request):
+        book_reviews = BookReview.objects.all()
+        author_reviews = AuthorReview.objects.all()
+
+        context = {
+            'book_reviews': book_reviews,
+            'author_reviews': author_reviews,
+        }
+
+        return render(request, 'librarian/reviews.html', context)

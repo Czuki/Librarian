@@ -5,6 +5,7 @@
     <div class="row d-flex justify-content-center">
         <div class="col-md-6">
             <nav>
+                {{ message }}
                 {% if books.has_other_pages %}
                     <div class="">
                         <ul class="pagination justify-content-center">
@@ -34,11 +35,12 @@
     {% for book in books %}
         <div class="row mb-3">
             <div class="col-4 themed-grid-col"></div>
-            <div class="col-4 themed-grid-col border rounded border-primary py-2">{{book.name}}</div>
+            <div class="col-4 themed-grid-col border rounded border-primary py-2">{{book.name | title}}</div>
             <div class="col-4 themed-grid-col">
                 <div class="btn-group" role="group" aria-label="Basic example">
                   <a href="/delete-book/{{ book.id }}/" type="button" class="btn btn-primary">Usuń</a>
-                  <a href="" type="button" class="btn btn-primary">Szczegóły</a>
+                  <a href="/details-book/{{ book.id }}/" type="button" class="btn btn-primary">Szczegóły</a>
+                  <a href="/fav-book/{{ book.id }}/" type="button" class="btn btn-primary">Lubię</a>
                 </div>
             </div>
         </div>

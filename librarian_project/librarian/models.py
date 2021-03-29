@@ -45,4 +45,5 @@ class Review(models.Model):
     content = models.TextField()
     points = models.IntegerField(default=0)
     date_added = models.DateTimeField(auto_now_add=True)
-    #TODO: dodawanie recenzji i ocennianie ich
+    #TODO: dodawanie recenzji i ocennianie ich i komentarze
+    # nowy model review comments?

@@ -19,11 +19,9 @@
                             <li class="list-group-item d-flex justify-content-between lh-sm">
                             <div>
                                 <h6>{{ breview.book|title }}  </h6>
+                                <small class="text-muted">{{ breview.reviewer }}</small>
                             </div>
 
-                            <div>
-                                <h6 class="text-muted"> {{ breview.reviewer }}</h6>
-                            </div>
                             </li><a class="btn btn-secondary" type="button" href="/reviews/{{ breview.id }}/">Czytaj wiecej</a>
                         {% endfor %}
                     </ul>

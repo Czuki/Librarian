@@ -38,9 +38,13 @@
             <div class="col-4 themed-grid-col border rounded border-primary py-2">{{book.name | title}}</div>
             <div class="col-4 themed-grid-col">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  <a href="/delete-book/{{ book.id }}/" type="button" class="btn btn-primary">Usuń</a>
-                  <a href="/details-book/{{ book.id }}/" type="button" class="btn btn-primary">Szczegóły</a>
-                  <a href="/fav-book/{{ book.id }}/" type="button" class="btn btn-primary">Lubię</a>
+                    {% if user.is_authenticated %}
+                    <a href="/delete-book/{{ book.id }}/" type="button" class="btn btn-primary">Usuń</a>
+                    {% endif %}
+                    <a href="/details-book/{{ book.id }}/" type="button" class="btn btn-primary">Szczegóły</a>
+                    {% if user.is_authenticated %}
+                    <a href="/fav-book/{{ book.id }}/" type="button" class="btn btn-primary">Lubię</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from librarian.models import Author, Book, Profile, BookReview, AuthorReview
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+
+from librarian.models import Author, Book, Profile, Review
+from librarian.forms import ReviewForm
 
 
 def signup(request):
@@ -18,13 +20,23 @@ def signup(request):
             print(raw_password)
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('home')
+            return redirect('index')
     else:
         form = UserCreationForm()
     return render(request, 'librarian/signup.html', {'form': form})
 
 
-class HomeView(View):
+class IndexView(View):
+    def get(self, request):
+
+        context = {
+            'recent_books': Book.objects.order_by('-id')[:5],
+        }
+
+        return render(request, 'librarian/index.html', context)
+
+
+class BookAdd(View):
     def get(self, request):
         context = {
             'authors': Author.objects.all(),
@@ -156,12 +168,42 @@ class FavBookRemove(View):
 
 class ReviewsView(View):
     def get(self, request):
-        book_reviews = BookReview.objects.all()
-        author_reviews = AuthorReview.objects.all()
+        book_reviews = Review.objects.all()
 
         context = {
             'book_reviews': book_reviews,
-            'author_reviews': author_reviews,
+        }
+        #TODO: add review buttons for books and authors
+        return render(request, 'librarian/reviews.html', context)
+
+
+class ReviewAdd(View):
+    def get(self, request):
+        form = ReviewForm()
+        context = {
+            'form': form,
+        }
+        return render(request, 'librarian/add-review.html', context)
+
+    def post(self, request):
+        form = ReviewForm(request.POST)
+        if self.request.user.is_authenticated:
+            current_user = get_object_or_404(User, pk=request.user.id)
+            if form.is_valid():
+                Review.objects.create(
+                    book=form.cleaned_data['book'],
+                    content=form.cleaned_data['content'],
+                    reviewer=current_user,
+                )
+
+        return redirect('/reviews/')
+
+class ReviewDetails(View):
+    def get(self, request, review_id):
+        review = get_object_or_404(Review, pk=review_id)
+
+        context = {
+            'review': review,
         }
 
-        return render(request, 'librarian/reviews.html', context)
+        return render(request, 'librarian/details-review.html', context)

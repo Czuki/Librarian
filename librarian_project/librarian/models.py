@@ -39,16 +39,10 @@ class Profile(models.Model):
         return f'{self.user}'
 
 
-class BookReview(models.Model):
+class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    reviewer = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     points = models.IntegerField(default=0)
+    date_added = models.DateTimeField(auto_now_add=True)
     #TODO: dodawanie recenzji i ocennianie ich
-
-
-class AuthorReview(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    reviewer = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    content = models.TextField()
-    points = models.IntegerField(default=0)

@@ -1,20 +1,13 @@
 {% extends 'librarian/__base__.html' %}
 
 {% block content %}
-
-
-
 <div class="container-fluid">
-
     <div class="row">
-
         <div class="col-2"></div>
-
         <div class="col-8">
             <h1>{{ user.username }}</h1>
             <div class="row">
             <div class="col-8">
-
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted">Ulubione Książki:</span>
                 </h4>
@@ -25,13 +18,10 @@
                         <div>
                             <h6 class="my-0">{{ book.name|title }}</h6>
                         </div>
-                            <span class="text-muted">{{ book.isbn }}</span>
                         </li><a class="btn btn-secondary" type="button" href="/fav-book-remove/{{ book.id }}/">Usuń</a>
-
                     {% endfor %}
                 </ul>
                 </div>
-
             </div>
             <div class="col-4">
 
@@ -46,12 +36,10 @@
                             <h6 class="my-0">{{ author }}</h6>
                             <small class="text-muted">{{ book.author }}</small>
                         </div>
-                            <span class="text-muted">{{ book.isbn }}</span>
                         </li><a class="btn btn-secondary" type="button" href="">Usuń</a>
                     {% endfor %}
                 </ul>
                 </div>
-
             </div>
         </div>
         </div>

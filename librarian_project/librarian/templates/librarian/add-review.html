@@ -1,0 +1,25 @@
+{% extends 'librarian/__base__.html' %}
+
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-8">
+            <form action="" method="post"> {% csrf_token %}
+                <label for="{{ form.book.id_for_label }}">Książka:</label>
+                <div class="fieldWrapper">
+                    {{ form.book.errors }}
+                    {{ form.book }}
+                </div>
+                <label for="{{ form.content.id_for_label }}">Tekst:</label>
+                <div class="fieldWrapper">
+                    {{ form.content.errors }}
+                    {{ form.content }}
+                </div>
+                <button type="submit" class="btn btn-secondary">Dodaj</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

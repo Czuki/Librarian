@@ -18,13 +18,10 @@
                         <div>
                             <h6 class="my-0">{{ book.name|title }}</h6>
                         </div>
-                            <span class="text-muted">{{ book.isbn }}</span>
                         </li><a class="btn btn-secondary" type="button" href="/fav-book-remove/{{ book.id }}/">Usuń</a>
-
                     {% endfor %}
                 </ul>
                 </div>
-
             </div>
             <div class="col-4">
 
@@ -39,7 +36,6 @@
                             <h6 class="my-0">{{ author }}</h6>
                             <small class="text-muted">{{ book.author }}</small>
                         </div>
-                            <span class="text-muted">{{ book.isbn }}</span>
                         </li><a class="btn btn-secondary" type="button" href="">Usuń</a>
                     {% endfor %}
                 </ul>

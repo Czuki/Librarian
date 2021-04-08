@@ -9,16 +9,15 @@ from django.contrib.auth.models import User
 from librarian.models import Author, Book, Profile, Review
 from librarian.forms import ReviewForm
 
+#TODO: ujednolicic jezyk na stronie
+
 
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            print(raw_password)
-            user = authenticate(username=username, password=raw_password)
+            user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password1'))
             login(request, user)
             return redirect('index')
     else:
@@ -55,6 +54,18 @@ class BookAdd(View):
             isbn=new_book_isbn
         )
         return redirect('/')
+
+
+class BookDetails(View):
+    def get(self, request, book_id):
+        book = get_object_or_404(Book, pk=book_id)
+        reviews_count = Review.objects.filter(book=book).count()
+        context = {
+            'book': book,
+            'reviews_count': reviews_count,
+        }
+        return render(request, 'librarian/details-book.html', context)
+
 
 
 class BookList(View):
@@ -123,6 +134,17 @@ class AuthorList(View):
         return render(request, 'librarian/list-authors.html', context)
 
 
+class AuthorDetails(View):
+    def get(self, request, author_id):
+        author = get_object_or_404(Author, pk=author_id)
+        author_books = Book.objects.filter(author=author)
+        context = {
+            'author': author,
+            'books': author_books,
+        }
+        return render(request, 'librarian/details-author.html', context)
+
+
 class AuthorDelete(View):
     def get(self, request, author_id):
         if self.request.user.has_perm('librarian.delete_author'):
@@ -173,9 +195,10 @@ class ReviewsView(View):
         context = {
             'book_reviews': book_reviews,
         }
-        #TODO: add review buttons for books and authors
+        #TODO: add review buttons for books
         return render(request, 'librarian/reviews.html', context)
 
+#TODO: allow admin to remove reviews
 
 class ReviewAdd(View):
     def get(self, request):
@@ -197,6 +220,7 @@ class ReviewAdd(View):
                 )
 
         return redirect('/reviews/')
+
 
 class ReviewDetails(View):
     def get(self, request, review_id):

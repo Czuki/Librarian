@@ -1,0 +1,43 @@
+{% extends 'librarian/__base__.html' %}
+
+{% block content %}
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <td></td>
+      <td>Tytuł:</td>
+      <td>{{ book | title}}</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row"></th>
+      <td></td>
+      <td>Autor:</td>
+      <td>{{ book.author }}</td>
+    </tr>
+    <tr>
+      <th scope="row"></th>
+      <td></td>
+      <td>ISBN:</td>
+      <td>{{ book.isbn }}</td>
+    </tr>
+    <tr>
+      <th scope="row"></th>
+      <td></td>
+      <td></td>
+      <td><a class="btn btn-secondary" type="button" href="/reviews/add/{{ book.id }}">Recenzje: {{ reviews_count }}</a></td>
+    </tr>
+    <tr>
+      <th scope="row"></th>
+      <td></td>
+      <td></td>
+      <td><a class="btn btn-secondary" type="button" href="/reviews/add/">Napisz recenzję</a></td>
+    </tr>
+  </tbody>
+</table>
+
+{% endblock content %}

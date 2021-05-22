@@ -9,23 +9,29 @@
                 {% if authors.has_other_pages %}
                     <div class="">
                         <ul class="pagination justify-content-center">
+
                             {% if authors.has_previous %}
                                 <li class="page-item"><a class="page-link" href="?page={{ authors.previous_page_number }}">&laquo;</a></li>
                             {% else %}
                                 <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
                             {% endif %}
+
                             {% for i in authors.paginator.page_range %}
-                                {% if authors.number == i %}
-                                    <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
-                                {% else %}
-                                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-                                {% endif %}
+
+                                    {% if authors.number == i %}
+                                        <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                                    {% elif i > authors.number|add:'-6' and i < authors.number|add:'6' %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+
                             {% endfor %}
+
                             {% if authors.has_next %}
-                                <li class="page-item"><a class="page-link" href="?page={{ authors.next_page_number }}">&raquo;</a></li>
-                            {% else %}
-                                <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ authors.next_page_number }}">&raquo;</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
                             {% endif %}
+
                         </ul>
                     </div>
                 {% endif %}
@@ -35,7 +41,7 @@
     {% for author in authors %}
         <div class="row mb-3">
             <div class="col-4 themed-grid-col"></div>
-            <div class="col-4 themed-grid-col border rounded border-primary py-2">{{author.last_name}} {{author.first_name}} </div>
+            <div class="col-4 themed-grid-col border rounded border-primary py-2">{{author.author}}</div>
             <div class="col-4 themed-grid-col">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     {% if user.is_authenticated %}

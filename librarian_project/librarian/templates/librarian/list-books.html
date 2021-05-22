@@ -17,7 +17,7 @@
                             {% for i in books.paginator.page_range %}
                                 {% if books.number == i %}
                                     <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
-                                {% else %}
+                                {% elif i > books.number|add:'-6' and i < books.number|add:'6' %}
                                     <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                                 {% endif %}
                             {% endfor %}

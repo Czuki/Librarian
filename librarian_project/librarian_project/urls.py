@@ -27,5 +27,6 @@ urlpatterns = [
 
     path('reviews/', lib_views.ReviewsView.as_view(), name='reviews'),
     path('reviews/add/', lib_views.ReviewAdd.as_view(), name='add-review'),
+    # path('reviews/add', lib_views.ReviewAdd.as_view(), name='add-review'),
     path('reviews/<int:review_id>/', lib_views.ReviewDetails.as_view(), name='details-review'),
 ]

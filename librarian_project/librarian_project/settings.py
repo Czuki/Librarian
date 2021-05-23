@@ -75,16 +75,32 @@ WSGI_APPLICATION = 'librarian_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
+
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'librarian_db',
+    #     'USER': 'librarian_user',
+    #     'PASSWORD': 'librarian',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+    #     'TEST': {
+    #         'NAME': 'test',
+    #     }
+    # },
+
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'librarian_db',
-        'USER': 'librarian_user',
-        'PASSWORD': 'librarian',
-        'HOST': 'localhost',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'test',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
         'PORT': '',
-    }
+    },
 }
+
+
 
 
 # Password validation

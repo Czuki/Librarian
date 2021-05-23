@@ -25,6 +25,10 @@ urlpatterns = [
     path('fav-book/<int:book_id>/', lib_views.FavBook.as_view(), name='fav-book'),
     path('fav-book-remove/<int:book_id>/', lib_views.FavBookRemove.as_view(), name='fav-book-remove'),
 
+    path('fav-author/<int:author_id>/', lib_views.FavAuthor.as_view(), name='fav-author'),
+    path('fav-author-remove/<int:author_id>/', lib_views.FavAuthorRemove.as_view(), name='fav-author-remove'),
+
+
     path('reviews/', lib_views.ReviewsView.as_view(), name='reviews'),
     path('reviews/add/', lib_views.ReviewAdd.as_view(), name='add-review'),
     # path('reviews/add', lib_views.ReviewAdd.as_view(), name='add-review'),

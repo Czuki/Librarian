@@ -13,6 +13,7 @@ from librarian.forms import ReviewForm
 
 
 def signup(request):
+    """User registration"""
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -26,6 +27,7 @@ def signup(request):
 
 
 class IndexView(View):
+    """Homepage with site description and list of recently added books"""
     def get(self, request):
         context = {
             'recent_books': Book.objects.order_by('-id')[:5],
@@ -34,6 +36,7 @@ class IndexView(View):
 
 
 class BookAdd(View):
+    """View for adding new books"""
     def get(self, request):
         context = {
             'authors': Author.objects.all().order_by('author'),
@@ -55,6 +58,7 @@ class BookAdd(View):
 
 
 class BookDetails(View):
+    """Shows details about a book, its author and reviews"""
     def get(self, request, book_id):
         book = get_object_or_404(Book, pk=book_id)
         reviews_count = Review.objects.filter(book=book).count()
@@ -66,6 +70,7 @@ class BookDetails(View):
 
 
 class BookList(View):
+    """List of all books with pagination"""
     def get(self, request):
         books_list = Book.objects.all().order_by('name')
         paginator = Paginator(books_list, 6)
@@ -84,6 +89,7 @@ class BookList(View):
 
 
 class BookDelete(View):
+    """Removes book from database, only for admins"""
     def get(self, request, book_id):
         if self.request.user.has_perm('librarian.delete_book'):
             book_to_delete = get_object_or_404(Book, pk=book_id)
@@ -94,6 +100,7 @@ class BookDelete(View):
 
 
 class AuthorAdd(View):
+    """Adds new author to database"""
     def get(self, request):
         context = {
             'authors': Author.objects.all(),
@@ -113,6 +120,7 @@ class AuthorAdd(View):
 
 
 class AuthorList(View):
+    """Lists all authors with pagination """
     def get(self, request):
         authors_list = Author.objects.all().order_by('author')
         paginator = Paginator(authors_list, 6)
@@ -131,6 +139,7 @@ class AuthorList(View):
 
 
 class AuthorDetails(View):
+    """Shows author details, with """
     def get(self, request, author_id):
         author = get_object_or_404(Author, pk=author_id)
         author_books = Book.objects.filter(author=author)
@@ -142,6 +151,7 @@ class AuthorDetails(View):
 
 
 class AuthorDelete(View):
+    """Remove Author from database"""
     def get(self, request, author_id):
         if self.request.user.has_perm('librarian.delete_author'):
             author_to_delete = get_object_or_404(Author, pk=author_id)
@@ -152,6 +162,7 @@ class AuthorDelete(View):
 
 
 class ProfileView(View):
+    """Shows user profile"""
     def get(self, request):
         current_user = get_object_or_404(User, pk=request.user.id)
         prof = Profile.objects.get(user=current_user)
@@ -163,7 +174,31 @@ class ProfileView(View):
         return render(request, 'librarian/profile.html', context)
 
 
+class FavAuthor(View):
+    """Adds Author to favorites"""
+    def get(self, request, author_id):
+        current_user = get_object_or_404(User, pk=request.user.id)
+        profile = Profile.objects.get(user=current_user)
+        fav_authors = profile.fav_authors.all()
+        liked_author = get_object_or_404(Author, pk=author_id)
+        if liked_author not in fav_authors:
+            profile.fav_authors.add(liked_author)
+            return redirect('/profile/')
+        return redirect('/list-authors/')
+
+
+class FavAuthorRemove(View):
+    """Removes author from favorites"""
+    def get(self, request, author_id):
+        current_user = get_object_or_404(User, pk=request.user.id)
+        profile = Profile.objects.get(user=current_user)
+        unliked_author = get_object_or_404(Author, pk=author_id)
+        profile.fav_authors.remove(unliked_author)
+        return redirect('/profile/')
+
+
 class FavBook(View):
+    """Adds book to favorites"""
     def get(self, request, book_id):
         current_user = get_object_or_404(User, pk=request.user.id)
         profile = Profile.objects.get(user=current_user)
@@ -176,6 +211,7 @@ class FavBook(View):
 
 
 class FavBookRemove(View):
+    """Removes book from favorites"""
     def get(self, request, book_id):
         current_user = get_object_or_404(User, pk=request.user.id)
         profile = Profile.objects.get(user=current_user)
@@ -185,6 +221,7 @@ class FavBookRemove(View):
 
 
 class ReviewsView(View):
+    """Shows all book reviews"""
     def get(self, request):
         book_reviews = Review.objects.all()
         context = {
@@ -193,9 +230,9 @@ class ReviewsView(View):
         #TODO: add review buttons for books
         return render(request, 'librarian/reviews.html', context)
 
-#TODO: allow admin to remove reviews
 
 class ReviewAdd(View):
+    """Shows review form for writing new book review"""
     def get(self, request):
         form = ReviewForm()
         context = {
@@ -217,6 +254,7 @@ class ReviewAdd(View):
 
 
 class ReviewDetails(View):
+    """Shows full review with details"""
     def get(self, request, review_id):
         review = get_object_or_404(Review, pk=review_id)
         context = {
